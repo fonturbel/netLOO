@@ -93,8 +93,7 @@ Rename trophic levels with `lower_name` / `higher_name` (e.g. `"Hosts"` /
 
 ## Citation
 
-If you use this package, please cite the original blooming-desert
-plant–pollinator study (Medel & Fontúrbel) alongside this toolkit.
+Fontúrbel FE, Medel, R (2026) netLOO: a comprehensive package to compare multiple networks across time periods. <https://github.com/fonturbel/netLOO>
 
 ## License
 
