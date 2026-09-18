@@ -1,8 +1,10 @@
 # netLOO
 
-A dataset-agnostic toolkit for **multi-temporal bipartite network analysis**
-— apply the full pipeline to any set of bipartite networks sampled at three
-or more time points (plant–pollinator webs across years, host–parasite
+### netLOO package version 0.0-1
+
+
+
+This package contains a dataset-agnostic toolkit for **multi-temporal bipartite network analysis** that apply the full pipeline to any set of bipartite networks sampled at three or more time points (plant–pollinator webs across years, host–parasite
 series, networks across an invasion gradient, etc.).
 
 Generalized from the analysis pipeline developed for Medel & Fontúrbel's
