@@ -19,7 +19,7 @@ This package was based on the ideas developed by Rodrigo Medel & Francisco E. Fo
   pair of time points.
 - **Leave-one-out contribution**: for each time point, expected contribution
   to the pooled metaweb vs. observed-unique contribution relative to the
-  leave-one-out metaweb, plus an efficiency index.
+  leave-one-out metaweb, plus an efficiency index. The conceptual key aspect here is that we compute the metaweb leaving out the network to be compared in order to avoid redundancy in the analyses that may cause non-independence.
 - **Null models**: parallel z-score / p-value for connectance, nestedness,
   modularity.
 - **Rarefaction**: species/interaction accumulation curves.
