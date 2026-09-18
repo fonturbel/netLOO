@@ -9,7 +9,7 @@ series, networks across an invasion gradient, etc.).
 
 This package was based on the ideas developed by Rodrigo Medel & Francisco E. Fontúrbel's to assess changes in plant-pollinator networls in the Chilean blooming desert.
 
-## What it computes
+## What this package computes
 
 - **Per network**: connectance, NODF, connectance-corrected NODF (NODF_c),
   modularity, H2′ (with the bipartite 2.23 bug fix), generality,
