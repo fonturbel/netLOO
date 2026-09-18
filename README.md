@@ -7,8 +7,7 @@
 This package contains a dataset-agnostic toolkit for **multi-temporal bipartite network analysis** that apply the full pipeline to any set of bipartite networks sampled at three or more time points (plant–pollinator webs across years, host–parasite
 series, networks across an invasion gradient, etc.).
 
-Generalized from the analysis pipeline developed for Medel & Fontúrbel's
-Chilean "blooming desert" plant–pollinator study.
+This package was based on the ideas developed by Rodrigo Medel & Francisco E. Fontúrbel's to assess changes in plant-pollinator networls in the Chilean blooming desert.
 
 ## What it computes
 
