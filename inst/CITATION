@@ -1,0 +1,8 @@
+bibentry(
+  bibtype  = "Misc",
+  title    = "netLOO: a comprehensive package to compare multiple networks across time periods",
+  author   = c(person("Francisco E.", "Fontúrbel"), person("Rodrigo", "Medel")),
+  year     = "2026",
+  url      = "https://github.com/fonturbel/netLOO",
+  textVersion = "Fontúrbel FE, Medel, R (2026) netLOO: a comprehensive package to compare multiple networks across time periods. https://github.com/fonturbel/netLOO"
+)

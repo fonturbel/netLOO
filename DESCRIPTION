@@ -1,9 +1,10 @@
 Package: netLOO
 Title: Leave-One-Out Contribution Analysis for Multi-Temporal Bipartite Networks
 Version: 0.0.0.9000
-Authors@R:
+Authors@R: c(
     person("Francisco E.", "Fontúrbel", , "francisco.fonturbel@gmail.com",
-           role = c("aut", "cre"))
+           role = c("aut", "cre")),
+    person("Rodrigo", "Medel", role = "aut"))
 Description: A dataset-agnostic toolkit for multi-temporal bipartite
     network analysis (e.g. plant-pollinator webs sampled across years or
     conditions). Computes per-network structural metrics, species
