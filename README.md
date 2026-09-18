@@ -12,8 +12,7 @@ This package was based on the ideas developed by Rodrigo Medel & Francisco E. Fo
 ## What this package computes
 
 - **Per network**: connectance, NODF, connectance-corrected NODF (NODF_c),
-  modularity, H2′ (with the bipartite 2.23 bug fix), generality,
-  vulnerability, web asymmetry, links/species, robustness.
+  modularity, H2′ (implementing a bug fix that caused an unexpectwed error in bipartite 2.23 bug fix), generality, vulnerability, web asymmetry, links/species, and robustness.
 - **Temporal**: Spearman trend of each metric over time; species
   persistence, Jaccard turnover, gains/losses, core species.
 - **Beta diversity**: `betalinkr` partitioning (S / OS / WN / ST) for every
