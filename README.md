@@ -71,13 +71,28 @@ plot_richness(results)
 plot_loo_contribution(results)
 ```
 
-Or just call the leave-one-out pieces directly on any list of matrices:
+## Running a single component
+
+Skip the full pipeline (and its slow null models) when you only need one
+piece. `nodf_c()` and `loo_only()` take either a `bd_pipeline_config`, a
+named list of matrices, a single matrix, or (for `nodf_c()`) a file path:
 
 ```r
-networks <- load_networks(cfg)
-metaweb  <- build_metaweb(networks)
-loo      <- loo_contribution_analysis(networks, metaweb)
+# Just NODF_c, on one matrix or a whole folder of them
+nodf_c(read_network_matrix("2020.csv"))
+nodf_c(cfg)                    # named list, one result per time point
+nodf_c(cfg, label = "2020")    # single time point
+
+# Just the leave-one-out contribution analysis, no null models
+loo_only(cfg)
+loo_only(list(t1 = net1, t2 = net2, t3 = net3))
 ```
+
+Both still accept a `bd_pipeline_config` so existing `cfg`-based scripts
+keep working unchanged. The lower-level building blocks
+(`load_networks()`, `build_metaweb()`, `calc_NODFc()`,
+`loo_contribution_analysis()`, `calculate_network_metrics()`, ...) are
+exported individually too, if you want finer control.
 
 ## Applying to a new dataset
 
@@ -88,6 +103,11 @@ loo      <- loo_contribution_analysis(networks, metaweb)
 
 Rename trophic levels with `lower_name` / `higher_name` (e.g. `"Hosts"` /
 `"Parasites"`). Set `do_nodfc = FALSE` to skip the slow `maxnodf` step.
+
+> **Known issue**: `calc_NODFc()` / `nodf_c()` can segfault inside
+> `maxnodf::maxnodf()`'s C++ backend on some matrix/R/maxnodf combinations.
+> If you hit this, skip `NODF_c` (`do_nodfc = FALSE`, or don't call
+> `nodf_c()`) until it's tracked down.
 
 ## Citation
 
