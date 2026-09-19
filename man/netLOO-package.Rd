@@ -22,6 +22,7 @@ Useful links:
 Authors:
 \itemize{
   \item Francisco E. Fontúrbel \email{francisco.fonturbel@gmail.com}
+  \item Rodrigo Medel
 }
 
 }
