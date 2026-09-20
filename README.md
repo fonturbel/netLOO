@@ -37,6 +37,32 @@ remotes::install_github("fonturbel/netLOO")
 remotes::install_github("christophhoeppke/maxnodf")
 ```
 
+## Dependencies
+
+Base R (`stats`, `utils`, `graphics`, `grDevices`) covers the core; the
+following packages are needed for full functionality (network metrics,
+beta diversity, plots, parallel null models):
+
+```r
+install.packages(c("bipartite", "vegan", "igraph", "ggplot2", "tidyr",
+                    "dplyr", "foreach", "doParallel", "betalink"))
+
+# not on CRAN:
+remotes::install_github("christophhoeppke/maxnodf")
+```
+
+| Package | Used for |
+|---|---|
+| `bipartite` | core bipartite network metrics (connectance, NODF, modularity, H2′, etc.) |
+| `vegan` | diversity/ordination utilities |
+| `igraph` | network representation/algorithms |
+| `ggplot2` | plotting functions (`plot_richness()`, `plot_loo_contribution()`, ...) |
+| `tidyr`, `dplyr` | data wrangling |
+| `foreach`, `doParallel` | parallel null models |
+| `betalink` | `betalinkr` pairwise beta diversity partitioning |
+| `maxnodf` (GitHub) | connectance-corrected NODF (`nodf_c()`, `do_nodfc = TRUE`) |
+| `rmarkdown`, `testthat` | vignettes / package tests (dev only) |
+
 ## Input format
 
 - One CSV matrix **per time point**: rows = lower trophic level (e.g.
