@@ -1,6 +1,6 @@
 # netLOO
 
-### netLOO package version 0.0-2
+### netLOO package version 0.0-3
 
 This package contains a dataset-agnostic toolkit for **multi-temporal bipartite network analysis** that apply the full pipeline to any set of bipartite networks sampled at three or more time points (plant–pollinator webs across years, host–parasite
 series, networks across an invasion gradient, etc.).
@@ -51,17 +51,17 @@ install.packages(c("bipartite", "vegan", "igraph", "ggplot2", "tidyr",
 remotes::install_github("christophhoeppke/maxnodf")
 ```
 
-| Package | Used for |
-|---|---|
-| `bipartite` | core bipartite network metrics (connectance, NODF, modularity, H2′, etc.) |
-| `vegan` | diversity/ordination utilities |
-| `igraph` | network representation/algorithms |
-| `ggplot2` | plotting functions (`plot_richness()`, `plot_loo_contribution()`, ...) |
-| `tidyr`, `dplyr` | data wrangling |
-| `foreach`, `doParallel` | parallel null models |
-| `betalink` | `betalinkr` pairwise beta diversity partitioning |
-| `maxnodf` (GitHub) | connectance-corrected NODF (`nodf_c()`, `do_nodfc = TRUE`) |
-| `rmarkdown`, `testthat` | vignettes / package tests (dev only) |
+| Package                 | Used for                                                                  |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `bipartite`             | core bipartite network metrics (connectance, NODF, modularity, H2′, etc.) |
+| `vegan`                 | diversity/ordination utilities                                            |
+| `igraph`                | network representation/algorithms                                         |
+| `ggplot2`               | plotting functions (`plot_richness()`, `plot_loo_contribution()`, ...)    |
+| `tidyr`, `dplyr`        | data wrangling                                                            |
+| `foreach`, `doParallel` | parallel null models                                                      |
+| `betalink`              | `betalinkr` pairwise beta diversity partitioning                          |
+| `maxnodf` (GitHub)      | connectance-corrected NODF (`nodf_c()`, `do_nodfc = TRUE`)                |
+| `rmarkdown`, `testthat` | vignettes / package tests (dev only)                                      |
 
 ## Input format
 
