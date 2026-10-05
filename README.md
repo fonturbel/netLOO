@@ -1,5 +1,7 @@
 # netLOO
 
+[![R-CMD-check](https://github.com/fonturbel/netLOO/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fonturbel/netLOO/actions/workflows/R-CMD-check.yaml)
+
 ### netLOO package version 0.0-3
 
 This package contains a dataset-agnostic toolkit for **multi-temporal bipartite network analysis** that apply the full pipeline to any set of bipartite networks sampled at three or more time points (plant–pollinator webs across years, host–parasite
@@ -31,10 +33,13 @@ This package was based on the ideas developed by Rodrigo Medel & Francisco E. Fo
 remotes::install_github("fonturbel/netLOO")
 ```
 
-`maxnodf` (needed only for `do_nodfc = TRUE`) is not on CRAN:
+Two optional dependencies are not on CRAN: `maxnodf` (needed only for
+`do_nodfc = TRUE`) and `betalink` (needed only for `plot_beta_pair()`;
+archived from CRAN):
 
 ```r
 remotes::install_github("christophhoeppke/maxnodf")
+remotes::install_version("betalink", version = "2.2.1")
 ```
 
 ## Dependencies
@@ -45,21 +50,22 @@ beta diversity, plots, parallel null models):
 
 ```r
 install.packages(c("bipartite", "vegan", "igraph", "ggplot2", "tidyr",
-                    "dplyr", "foreach", "doParallel", "betalink"))
+                    "dplyr", "foreach", "doParallel"))
 
 # not on CRAN:
 remotes::install_github("christophhoeppke/maxnodf")
+remotes::install_version("betalink", version = "2.2.1")
 ```
 
 | Package                 | Used for                                                                  |
 | ----------------------- | ------------------------------------------------------------------------- |
-| `bipartite`             | core bipartite network metrics (connectance, NODF, modularity, H2′, etc.) |
+| `bipartite`             | core bipartite network metrics (connectance, NODF, modularity, H2′, etc.) and `betalinkr()` beta diversity partitioning |
 | `vegan`                 | diversity/ordination utilities                                            |
 | `igraph`                | network representation/algorithms                                         |
 | `ggplot2`               | plotting functions (`plot_richness()`, `plot_loo_contribution()`, ...)    |
 | `tidyr`, `dplyr`        | data wrangling                                                            |
 | `foreach`, `doParallel` | parallel null models                                                      |
-| `betalink`              | `betalinkr` pairwise beta diversity partitioning                          |
+| `betalink` (archived)   | shared vs. exclusive species/links plot (`plot_beta_pair()`)              |
 | `maxnodf` (GitHub)      | connectance-corrected NODF (`nodf_c()`, `do_nodfc = TRUE`)                |
 | `rmarkdown`, `testthat` | vignettes / package tests (dev only)                                      |
 
