@@ -9,7 +9,8 @@ calculate_network_metrics(
   label,
   taxonomy = NULL,
   do_nodfc = TRUE,
-  robustness_reps = 100
+  robustness_reps = 100,
+  nodfc_quality = 1
 )
 }
 \arguments{
@@ -22,9 +23,11 @@ calculate_network_metrics(
 \item{do_nodfc}{Compute connectance-corrected NODF (needs \code{maxnodf}).}
 
 \item{robustness_reps}{Random-removal replicates for the robustness curve.}
+
+\item{nodfc_quality}{Passed to \code{\link[=calc_NODFc]{calc_NODFc()}}.}
 }
 \value{
-A list of per-network metrics.
+A list of per-network metrics. \code{H2} is NA for binary webs.
 }
 \description{
 All single-network metrics for one web at one time point

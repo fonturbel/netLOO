@@ -13,6 +13,15 @@ build_loo_metaweb <- function(network_list, exclude_index) {
   build_metaweb(network_list[-exclude_index])
 }
 
+# Species keys carry their level so a name used in both levels counts twice;
+# interaction keys use a control character that cannot occur in names.
+.bd_species_keys <- function(web)
+  c(paste0("L\u001f", rownames(web)), paste0("H\u001f", colnames(web)))
+.bd_link_keys <- function(web) {
+  l <- which(web > 0, arr.ind = TRUE)
+  paste(rownames(web)[l[, 1]], colnames(web)[l[, 2]], sep = "\u001f")
+}
+
 #' Species and interaction overlap of a focal network with a reference metaweb
 #'
 #' @param focal_net A bipartite matrix.
@@ -22,14 +31,10 @@ build_loo_metaweb <- function(network_list, exclude_index) {
 #'   `reference_meta`.
 #' @export
 calc_contribution <- function(focal_net, reference_meta) {
-  fl <- c(rownames(focal_net), colnames(focal_net))
-  rl <- c(rownames(reference_meta), colnames(reference_meta))
-  f_links <- which(focal_net > 0, arr.ind = TRUE)
-  f_int <- paste(rownames(focal_net)[f_links[, 1]],
-                 colnames(focal_net)[f_links[, 2]], sep = "_")
-  r_links <- which(reference_meta > 0, arr.ind = TRUE)
-  r_int <- paste(rownames(reference_meta)[r_links[, 1]],
-                 colnames(reference_meta)[r_links[, 2]], sep = "_")
+  fl <- .bd_species_keys(focal_net)
+  rl <- .bd_species_keys(reference_meta)
+  f_int <- .bd_link_keys(focal_net)
+  r_int <- .bd_link_keys(reference_meta)
   list(n_species = length(unique(fl)), n_interactions = length(f_int),
        shared_species = length(intersect(fl, rl)),
        unique_species = length(setdiff(fl, rl)),
@@ -55,9 +60,8 @@ calc_contribution <- function(focal_net, reference_meta) {
 #' @export
 loo_contribution_analysis <- function(networks, metaweb) {
   labs <- names(networks)
-  meta_species <- length(rownames(metaweb)) + length(colnames(metaweb))
-  ml <- which(metaweb > 0, arr.ind = TRUE)
-  meta_int <- length(paste(rownames(metaweb)[ml[, 1]], colnames(metaweb)[ml[, 2]]))
+  meta_species <- nrow(metaweb) + ncol(metaweb)
+  meta_int <- sum(metaweb > 0)
   out <- data.frame()
   for (i in seq_along(networks)) {
     exp_c <- calc_contribution(networks[[i]], metaweb)

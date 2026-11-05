@@ -2,24 +2,43 @@
 % Please edit documentation in R/null_models.R
 \name{enhanced_null_models}
 \alias{enhanced_null_models}
-\title{Parallel null-model significance test for one network}
+\title{Null-model significance test for one network}
 \usage{
-enhanced_null_models(web, n_null = 1000, n_cores = NULL, null_method = 1)
+enhanced_null_models(
+  web,
+  n_null = 1000,
+  n_cores = NULL,
+  null_method = "quasiswap",
+  seed = NULL
+)
 }
 \arguments{
 \item{web}{A bipartite matrix.}
 
 \item{n_null}{Number of null replicates.}
 
-\item{n_cores}{Cores for parallel evaluation (NULL = auto, capped at 14).}
+\item{n_cores}{Cores for parallel evaluation (NULL = auto, capped at 14;
+1 runs sequentially without a cluster).}
 
-\item{null_method}{\code{bipartite::nullmodel()} method id (1 = non-sequential).}
+\item{null_method}{See \code{\link[=generate_null_webs]{generate_null_webs()}}.}
+
+\item{seed}{Optional RNG seed.}
 }
 \value{
 A named list (one entry per metric) with \code{observed}, \code{null_mean},
-\code{null_sd}, \code{z_score}, \code{p_value}, \code{n_valid}.
+\code{null_sd}, \code{z_score}, \code{p_value}, \code{p_value_z}, \code{n_valid}, \code{note}.
 }
 \description{
-Compares observed connectance, nestedness and modularity against a null
-distribution generated with \code{bipartite::nullmodel()}.
+Compares observed connectance, nestedness (NODF) and modularity (Q)
+against null webs from \code{\link[=generate_null_webs]{generate_null_webs()}}, optionally in parallel.
+}
+\details{
+\code{p_value} is the two-sided empirical p-value,
+(1 + 2 * min(#null >= obs, #null <= obs)) / (n + 1), capped at 1.
+\code{p_value_z} is the normal approximation from the z-score, kept for
+comparison with netLOO <= 0.0.3. A metric that the null model holds fixed
+(connectance under \code{"quasiswap"}) gets NA z and p and a note.
+
+One seed per null web is drawn up front, so results do not depend on the
+number of cores.
 }

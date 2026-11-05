@@ -4,14 +4,17 @@
 \alias{build_metaweb}
 \title{Build the union metaweb from a list of networks}
 \usage{
-build_metaweb(networks)
+build_metaweb(networks, binary = TRUE)
 }
 \arguments{
 \item{networks}{A named list of matrices (e.g. from \code{\link[=load_networks]{load_networks()}}).}
+
+\item{binary}{TRUE (default) returns presence/absence; FALSE returns, for
+each pair, the number of networks in which it occurs.}
 }
 \value{
 A matrix: the union metaweb.
 }
 \description{
-Presence/absence pooled across all supplied networks.
+Build the union metaweb from a list of networks
 }

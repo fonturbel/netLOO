@@ -9,7 +9,9 @@ read_network_matrix(file, sep = ";")
 \arguments{
 \item{file}{Path to a delimited matrix file.}
 
-\item{sep}{Field separator (default ";").}
+\item{sep}{Field separator (default ";").
+Row and column names are trimmed of surrounding/duplicated whitespace, and
+a warning is raised if that leaves duplicated names.}
 }
 \value{
 A numeric matrix, or NULL (with a warning) if \code{file} doesn't exist.

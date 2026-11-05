@@ -22,7 +22,10 @@ plot_beta_pair(
 \item{na, nb, ns}{Colors for network \code{a}, network \code{b}, and shared nodes.}
 
 \item{show_metrics}{Return the \code{betalink::betalink()} metrics (default
-TRUE).}
+TRUE). These use the original betalink partition (OS = dissimilarity
+among shared species, ST = WN - OS) and are not the additive
+\code{betalinkr(partitioning = "commondenom")} components in \code{results$beta};
+report the latter (Fruend 2021).}
 }
 \value{
 If \code{show_metrics}, the \code{betalink::betalink()} result, invisibly;
