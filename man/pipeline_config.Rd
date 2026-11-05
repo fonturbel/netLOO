@@ -11,15 +11,17 @@ pipeline_config(
   sep = ";",
   metaweb = NULL,
   taxonomy = NULL,
-  weight_scale = 5,
   n_null = 1000,
-  null_method = 1,
+  null_method = "quasiswap",
   core_threshold = 0.5,
   robustness_reps = 100,
   n_cores = NULL,
   do_nodfc = TRUE,
+  nodfc_quality = 1,
+  seed = 1,
   lower_name = "Plants",
-  higher_name = "Pollinators"
+  higher_name = "Pollinators",
+  weight_scale = NULL
 )
 }
 \arguments{
@@ -35,17 +37,21 @@ manifest are resolved relative to).}
 \item{sep}{Field separator of the matrix CSVs (default ";").}
 
 \item{metaweb}{Optional path to a pooled/metaweb matrix. If NULL it is
-built automatically as the union of all networks.}
+built automatically as the union of all networks. A
+supplied metaweb is checked against that union (see
+\code{\link[=check_metaweb]{check_metaweb()}}).}
 
 \item{taxonomy}{Optional path to a CSV with columns \code{species} and \code{group}
 mapping higher-level (column) species to taxonomic groups.}
 
-\item{weight_scale}{Multiplier applied before H2' (bipartite needs integers
-for binary webs; 5 mirrors the original analysis).}
-
 \item{n_null}{Number of null models for significance testing.}
 
-\item{null_method}{bipartite::nullmodel method id (1 = non-sequential).}
+\item{null_method}{Null model, see \code{\link[=generate_null_webs]{generate_null_webs()}}. A character
+string is passed to \code{vegan::nullmodel()}; the default
+\code{"quasiswap"} keeps every row/column total and the number
+of links fixed, the appropriate null for binary webs. A
+number (1-5) uses \code{bipartite::nullmodel()}, which
+generates weighted matrices (quantitative webs only).}
 
 \item{core_threshold}{Persistence fraction to call a species "core".}
 
@@ -55,7 +61,17 @@ for binary webs; 5 mirrors the original analysis).}
 
 \item{do_nodfc}{Compute connectance-corrected NODF (needs maxnodf).}
 
+\item{nodfc_quality}{\code{maxnodf} optimisation level (0 = greedy, 1 = + hill
+climbing, 2 = + simulated annealing; 2 is slowest and
+has crashed R on some matrices).}
+
+\item{seed}{RNG seed so null models, robustness and modularity are
+reproducible. NULL leaves the RNG untouched.}
+
 \item{lower_name, higher_name}{Friendly labels for the two trophic levels.}
+
+\item{weight_scale}{Deprecated and ignored. H2' is no longer computed on
+rescaled binary webs (see \code{\link[=calc_H2]{calc_H2()}}).}
 }
 \value{
 A \code{bd_pipeline_config} object to pass to \code{\link[=run_network_pipeline]{run_network_pipeline()}}.

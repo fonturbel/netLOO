@@ -16,19 +16,22 @@
 run_network_pipeline <- function(cfg) {
   stopifnot(inherits(cfg, "bd_pipeline_config"))
   cat("=== Multi-temporal bipartite network pipeline ===\n")
+  # Configs saved with netLOO <= 0.0.3 lack these fields
+  if (is.null(cfg$nodfc_quality)) cfg$nodfc_quality <- 1
+  if (is.null(cfg$null_method)) cfg$null_method <- "quasiswap"
+  if (!is.null(cfg$seed)) set.seed(cfg$seed)
 
   networks <- load_networks(cfg)
   taxonomy <- load_taxonomy(cfg)
-
-  metaweb <- if (!is.null(cfg$metaweb) && file.exists(cfg$metaweb))
-    read_network_matrix(cfg$metaweb, cfg$sep) else build_metaweb(networks)
+  metaweb <- .bd_resolve_metaweb(cfg, networks)
 
   cat("\n-- per-network metrics --\n")
   temporal_metrics <- stats::setNames(
     lapply(names(networks), function(yr) {
       cat("  ", yr, "\n")
       calculate_network_metrics(networks[[yr]], yr, taxonomy,
-                                cfg$do_nodfc, cfg$robustness_reps)
+                                cfg$do_nodfc, cfg$robustness_reps,
+                                cfg$nodfc_quality)
     }), names(networks))
   metrics_df <- metrics_to_df(temporal_metrics)
 
@@ -46,9 +49,10 @@ run_network_pipeline <- function(cfg) {
 
   cat("-- null models --\n")
   null_models <- stats::setNames(
-    lapply(names(networks), function(yr)
-      tryCatch(enhanced_null_models(networks[[yr]], cfg$n_null,
-                                    cfg$n_cores, cfg$null_method),
+    lapply(seq_along(networks), function(i)
+      tryCatch(enhanced_null_models(networks[[i]], cfg$n_null,
+                                    cfg$n_cores, cfg$null_method,
+                                    seed = if (is.null(cfg$seed)) NULL else cfg$seed + i),
                error = function(e) list(error = e$message))),
     names(networks))
 
@@ -63,6 +67,24 @@ run_network_pipeline <- function(cfg) {
     persistence = persistence, core = core, trends = trends,
     beta = beta, loo = loo, null_models = null_models,
     rarefaction = rarefaction), class = "bd_pipeline_results")
+}
+
+# Metaweb from cfg$metaweb (checked against the union of the networks) or
+# built from the networks.
+.bd_resolve_metaweb <- function(cfg, networks) {
+  if (is.null(cfg$metaweb) || !file.exists(cfg$metaweb))
+    return(build_metaweb(networks))
+  mw <- read_network_matrix(cfg$metaweb, cfg$sep)
+  d <- check_metaweb(mw, networks)
+  if (!is.null(d))
+    warning(sprintf(paste("Supplied metaweb differs from the union of the",
+                          "networks (%d/%d lower and %d/%d higher species only",
+                          "in networks/metaweb; %d mismatched cells). Check name",
+                          "cleaning, or leave `metaweb = NULL` to build it."),
+                    length(d$lower_only_in_networks), length(d$lower_only_in_metaweb),
+                    length(d$higher_only_in_networks), length(d$higher_only_in_metaweb),
+                    d$mismatched_cells), call. = FALSE)
+  mw
 }
 
 #' Print a bd_pipeline_results object

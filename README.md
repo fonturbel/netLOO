@@ -2,7 +2,11 @@
 
 [![R-CMD-check](https://github.com/fonturbel/netLOO/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fonturbel/netLOO/actions/workflows/R-CMD-check.yaml)
 
-### netLOO package version 0.0-3
+### netLOO package version 0.1.0
+
+> **Upgrading from 0.0.3?** Version 0.1.0 fixes bugs that change H2′, NODF_c,
+> null-model tests, generality and vulnerability. Please recompute those results;
+> see [NEWS.md](NEWS.md).
 
 This package contains a dataset-agnostic toolkit for **multi-temporal bipartite network analysis** that apply the full pipeline to any set of bipartite networks sampled at three or more time points (plant–pollinator webs across years, host–parasite
 series, networks across an invasion gradient, etc.).
@@ -11,17 +15,24 @@ This package was based on the ideas developed by Rodrigo Medel & Francisco E. Fo
 
 ## What this package computes
 
-- **Per network**: connectance, NODF, connectance-corrected NODF (NODF_c),
-  modularity, H2′ (implementing a bug fix that caused an unexpectwed error in bipartite 2.23 bug fix), generality, vulnerability, web asymmetry, links/species, and robustness.
-- **Temporal**: Spearman trend of each metric over time; species
-  persistence, Jaccard turnover, gains/losses, core species.
+- **Per network**: connectance, NODF, connectance-corrected NODF (NODF_c,
+  same formula as `maxnodf::NODFc()`), modularity, generality,
+  vulnerability, web asymmetry, links/species, and robustness. H2′ is
+  computed for weighted webs only (it is NA for binary webs, where it
+  carries no information).
+- **Temporal**: Spearman trend of each metric over time, with the smallest
+  p-value attainable for that many time points (with 4 points no trend can
+  reach p < 0.05); species persistence, Jaccard turnover, gains/losses,
+  core species.
 - **Beta diversity**: `betalinkr` partitioning (S / OS / WN / ST) for every
   pair of time points.
 - **Leave-one-out contribution**: for each time point, expected contribution
   to the pooled metaweb vs. observed-unique contribution relative to the
   leave-one-out metaweb, plus an efficiency index. The conceptual key aspect here is that we compute the metaweb leaving out the network to be compared in order to avoid redundancy in the analyses that may cause non-independence.
-- **Null models**: parallel z-score / p-value for connectance, nestedness,
-  modularity.
+- **Null models**: observed vs null nestedness and modularity, with z-scores
+  and two-sided empirical p-values. The default `"quasiswap"` null keeps
+  row/column totals and the number of links fixed; seeds make results
+  reproducible regardless of the number of cores.
 - **Rarefaction**: species/interaction accumulation curves.
 - **Plots**: temporal trajectories, richness, turnover, LOO contribution,
   taxonomic composition, bipartite web diagrams, and betalink overlays.
@@ -88,8 +99,10 @@ library(netLOO)
 cfg <- pipeline_config(
   manifest = system.file("extdata", "manifest.csv", package = "netLOO"),
   data_dir = system.file("extdata", package = "netLOO"),
-  n_null   = 1000,
-  do_nodfc = TRUE
+  n_null      = 1000,
+  null_method = "quasiswap",   # fixed-fill null for binary webs
+  do_nodfc    = TRUE,
+  seed        = 1
 )
 results <- run_network_pipeline(cfg)
 
@@ -97,7 +110,7 @@ results$metrics_df          # per-period structural metrics
 results$persistence$turnover
 results$beta                # betalinkr S/OS/WN/ST, all pairs
 results$loo                 # leave-one-out contribution + efficiency
-results$null_models         # z-score / p-value per metric
+results$null_models         # z-score / empirical p-value per metric
 
 plot_richness(results)
 plot_loo_contribution(results)
@@ -136,10 +149,10 @@ exported individually too, if you want finer control.
 Rename trophic levels with `lower_name` / `higher_name` (e.g. `"Hosts"` /
 `"Parasites"`). Set `do_nodfc = FALSE` to skip the slow `maxnodf` step.
 
-> **Known issue**: `calc_NODFc()` / `nodf_c()` can segfault inside
-> `maxnodf::maxnodf()`'s C++ backend on some matrix/R/maxnodf combinations.
-> If you hit this, skip `NODF_c` (`do_nodfc = FALSE`, or don't call
-> `nodf_c()`) until it's tracked down.
+> **Known issue**: `maxnodf::maxnodf()` can segfault in its simulated
+> annealing step (`quality = 2`) on some matrices. netLOO now defaults to
+> `nodfc_quality = 1`; if you still hit a crash, use `nodfc_quality = 0` or
+> `do_nodfc = FALSE`.
 
 ## Citation
 

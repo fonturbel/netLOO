@@ -18,7 +18,7 @@
 #' @return The list from [calc_NODFc()] for a single network, or a named list
 #'   of such results when computed over several networks.
 #' @export
-nodf_c <- function(x, label = NULL, sep = ";", quality = 2) {
+nodf_c <- function(x, label = NULL, sep = ";", quality = 1) {
   if (inherits(x, "bd_pipeline_config")) {
     nets <- load_networks(x)
     if (!is.null(label)) return(calc_NODFc(nets[[label]], quality = quality))
@@ -48,10 +48,7 @@ nodf_c <- function(x, label = NULL, sep = ";", quality = 2) {
 loo_only <- function(x, metaweb = NULL) {
   if (inherits(x, "bd_pipeline_config")) {
     networks <- load_networks(x)
-    if (is.null(metaweb)) {
-      metaweb <- if (!is.null(x$metaweb) && file.exists(x$metaweb))
-        read_network_matrix(x$metaweb, x$sep) else build_metaweb(networks)
-    }
+    if (is.null(metaweb)) metaweb <- .bd_resolve_metaweb(x, networks)
   } else {
     networks <- x
     if (is.null(metaweb)) metaweb <- build_metaweb(networks)

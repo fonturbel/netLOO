@@ -4,7 +4,7 @@
 \alias{nodf_c}
 \title{Connectance-corrected NODF without running the full pipeline}
 \usage{
-nodf_c(x, label = NULL, sep = ";", quality = 2)
+nodf_c(x, label = NULL, sep = ";", quality = 1)
 }
 \arguments{
 \item{x}{A bipartite matrix, a path to a matrix file, a named list of

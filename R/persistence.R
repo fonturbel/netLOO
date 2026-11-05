@@ -79,19 +79,32 @@ identify_core_species <- function(networks, threshold = 0.5,
 
 #' Spearman correlation of each metric against ordered time
 #'
+#' With few time points these tests have almost no power: the smallest
+#' two-sided p-value an exact Spearman test can return is 2 / n!
+#' (0.33 for n = 3, 0.083 for n = 4, 0.017 for n = 5), reported as
+#' `min_possible_p`.
+#'
 #' @param metrics_df A data frame from [metrics_to_df()].
 #' @param time Optional numeric time axis (default: period order, 1..n).
-#' @return A named list (one entry per numeric metric) with `rho`, `p_value`.
+#' @return A named list (one entry per non-constant numeric metric) with
+#'   `rho`, `p_value`, `n` and `min_possible_p`.
 #' @export
 temporal_trend_tests <- function(metrics_df, time = NULL) {
   if (is.null(time)) time <- seq_len(nrow(metrics_df))
   num <- metrics_df[, vapply(metrics_df, is.numeric, logical(1)), drop = FALSE]
   out <- list()
   for (m in names(num)) {
-    if (sum(!is.na(num[[m]])) >= 3) {
-      ct <- suppressWarnings(stats::cor.test(time, num[[m]], method = "spearman"))
-      out[[m]] <- list(rho = unname(ct$estimate), p_value = ct$p.value)
+    ok <- !is.na(num[[m]])
+    n <- sum(ok)
+    if (n >= 3 && length(unique(num[[m]][ok])) > 1) {
+      ct <- suppressWarnings(stats::cor.test(time[ok], num[[m]][ok],
+                                             method = "spearman"))
+      out[[m]] <- list(rho = unname(ct$estimate), p_value = ct$p.value, n = n,
+                       min_possible_p = min(1, 2 / factorial(n)))
     }
   }
+  if (nrow(metrics_df) < 5)
+    message("Only ", nrow(metrics_df), " time points: Spearman trends cannot ",
+            "reach p < 0.05; treat them as descriptive.")
   out
 }

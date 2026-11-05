@@ -12,8 +12,12 @@ temporal_trend_tests(metrics_df, time = NULL)
 \item{time}{Optional numeric time axis (default: period order, 1..n).}
 }
 \value{
-A named list (one entry per numeric metric) with \code{rho}, \code{p_value}.
+A named list (one entry per non-constant numeric metric) with
+\code{rho}, \code{p_value}, \code{n} and \code{min_possible_p}.
 }
 \description{
-Spearman correlation of each metric against ordered time
+With few time points these tests have almost no power: the smallest
+two-sided p-value an exact Spearman test can return is 2 / n!
+(0.33 for n = 3, 0.083 for n = 4, 0.017 for n = 5), reported as
+\code{min_possible_p}.
 }

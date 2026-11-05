@@ -2,21 +2,23 @@
 % Please edit documentation in R/metrics.R
 \name{H2_fixed}
 \alias{H2_fixed}
-\title{H2' specialization with the bipartite 2.23 bug fix}
+\title{Deprecated: use calc_H2()}
 \usage{
-H2_fixed(web, weight_scale = 5, ...)
+H2_fixed(web, weight_scale = NULL, ...)
 }
 \arguments{
 \item{web}{A bipartite matrix.}
 
-\item{weight_scale}{Multiplier applied before calling \code{H2fun()}.}
+\item{weight_scale}{Ignored.}
 
-\item{...}{Passed to \code{bipartite::H2fun()}.}
+\item{...}{Passed to \code{\link[=calc_H2]{calc_H2()}}.}
 }
 \value{
-The named numeric vector returned by \code{H2fun()}, with \code{H2} fixed.
+See \code{\link[=calc_H2]{calc_H2()}}.
 }
 \description{
-Manually recomputes H2 from \code{H2fun()}'s uncorrected/min/max values,
-working around a normalization bug present in bipartite 2.23.
+Versions <= 0.0.3 multiplied the web by \code{weight_scale} and returned
+(H2uncorr - H2min) / (H2max - H2min), which is 1 - H2'. \code{bipartite::H2fun()}
+was correct all along (H2' = 0 is the expected value for binary webs).
+This now calls \code{\link[=calc_H2]{calc_H2()}} and ignores \code{weight_scale}.
 }

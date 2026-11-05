@@ -4,17 +4,25 @@
 \alias{calc_NODFc}
 \title{Connectance-corrected NODF (Song et al. 2017)}
 \usage{
-calc_NODFc(web, quality = 2)
+calc_NODFc(web, quality = 1)
 }
 \arguments{
 \item{web}{A bipartite matrix.}
 
-\item{quality}{Passed to \code{maxnodf::maxnodf()}.}
+\item{quality}{Passed to \code{maxnodf::maxnodf()} (0 = greedy, 1 = + hill
+climbing, 2 = + simulated annealing).}
 }
 \value{
-A list with \code{NODF_raw}, \code{max_NODF}, \code{NODF_n}, \code{connectance},
-\code{S_geometric}, \code{NODF_c}.
+A list with \code{NODF_raw} (0-1), \code{max_NODF}, \code{NODF_n},
+\code{connectance}, \code{S_geometric}, \code{NODF_c}.
 }
 \description{
-Needs the \code{maxnodf} and \code{bipartite} packages.
+NODF_c = NODF_n / (C * log10(S)), where NODF_n is NODF divided by the
+maximum NODF attainable for the same dimensions and fill (both on a 0-1
+scale), C is connectance and S the geometric mean of the two richnesses.
+This is the same formula as \code{maxnodf::NODFc()}. Versions <= 0.0.3 mixed a
+0-100 and a 0-1 scale and used the natural log, inflating NODF_c ~43x.
+}
+\details{
+Needs the \code{vegan} and \code{maxnodf} packages.
 }

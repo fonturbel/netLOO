@@ -221,7 +221,10 @@ plot_visweb <- function(x, label = NULL, type = "nested", ...) {
 #' @param a,b Period labels in `results` (or `"metaweb"` for the pooled web).
 #' @param na,nb,ns Colors for network `a`, network `b`, and shared nodes.
 #' @param show_metrics Return the `betalink::betalink()` metrics (default
-#'   TRUE).
+#'   TRUE). These use the original betalink partition (OS = dissimilarity
+#'   among shared species, ST = WN - OS) and are not the additive
+#'   `betalinkr(partitioning = "commondenom")` components in `results$beta`;
+#'   report the latter (Fruend 2021).
 #' @return If `show_metrics`, the `betalink::betalink()` result, invisibly;
 #'   otherwise NULL.
 #' @export
