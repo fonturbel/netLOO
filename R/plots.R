@@ -166,8 +166,10 @@ plot_network_web <- function(x, label = NULL, sorting = "ca",
   web <- .bd_pick_web(x, label)
   new_api <- "lower_color" %in% names(formals(bipartite::plotweb))
   if (new_api) {
+    # bipartite 2.24 accepts NULL (show) or FALSE (hide), not TRUE
+    lab <- if (isTRUE(labels)) NULL else FALSE
     bipartite::plotweb(web, sorting = sorting, srt = 90,
-                       lower_labels = labels, higher_labels = labels,
+                       lower_labels = lab, higher_labels = lab,
                        link_color = col_interaction, link_border = "azure4",
                        lower_color = col_low, lower_border = "chartreuse4",
                        higher_color = col_high, higher_border = "darkorange4", ...)
